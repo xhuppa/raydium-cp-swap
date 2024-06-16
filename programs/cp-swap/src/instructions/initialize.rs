@@ -180,14 +180,24 @@ pub fn initialize(
     if open_time <= block_timestamp {
         open_time = block_timestamp + 1;
     }
+    let authority_info = Box::new(ctx.accounts.authority.to_account_info());
+    let creator_info = Box::new(ctx.accounts.creator.to_account_info());
+    let token_0_vault_info = Box::new(ctx.accounts.token_0_vault.to_account_info());
+    let token_0_mint_info = Box::new(ctx.accounts.token_0_mint.to_account_info());
+    let system_program_info = Box::new(ctx.accounts.system_program.to_account_info());
+    let token_0_program_info = Box::new(ctx.accounts.token_0_program.to_account_info());
+    let token_1_vault_info = Box::new(ctx.accounts.token_1_vault.to_account_info());
+    let token_1_mint_info = Box::new(ctx.accounts.token_1_mint.to_account_info());
+    let token_1_program_info = Box::new(ctx.accounts.token_1_program.to_account_info());
+
     // due to stack/heap limitations, we have to create redundant new accounts ourselves.
     create_token_account(
-        &ctx.accounts.authority.to_account_info(),
-        &ctx.accounts.creator.to_account_info(),
-        &ctx.accounts.token_0_vault.to_account_info(),
-        &ctx.accounts.token_0_mint.to_account_info(),
-        &ctx.accounts.system_program.to_account_info(),
-        &ctx.accounts.token_0_program.to_account_info(),
+        &*authority_info,
+        &*creator_info,
+        &*token_0_vault_info,
+        &*token_0_mint_info,
+        &*system_program_info,
+        &*token_0_program_info,
         &[&[
             POOL_VAULT_SEED.as_bytes(),
             ctx.accounts.pool_state.key().as_ref(),
@@ -197,12 +207,12 @@ pub fn initialize(
     )?;
 
     create_token_account(
-        &ctx.accounts.authority.to_account_info(),
-        &ctx.accounts.creator.to_account_info(),
-        &ctx.accounts.token_1_vault.to_account_info(),
-        &ctx.accounts.token_1_mint.to_account_info(),
-        &ctx.accounts.system_program.to_account_info(),
-        &ctx.accounts.token_1_program.to_account_info(),
+        &*authority_info,
+        &*creator_info,
+        &*token_1_vault_info,
+        &*token_1_mint_info,
+        &*system_program_info,
+        &*token_1_program_info,
         &[&[
             POOL_VAULT_SEED.as_bytes(),
             ctx.accounts.pool_state.key().as_ref(),
