@@ -173,7 +173,7 @@ pub fn get_transfer_fee(mint_info: &AccountInfo, pre_fee_amount: u64) -> Result<
     Ok(fee)
 }
 
-pub fn is_supported_mint(mint_account: &InterfaceAccount<Mint>) -> Result<bool> {
+pub fn is_supported_mint(mint_account: &AccountInfo) -> Result<bool> {
     let mint_info = mint_account.to_account_info();
     if *mint_info.owner == Token::id() {
         return Ok(true);
@@ -197,12 +197,12 @@ pub fn is_supported_mint(mint_account: &InterfaceAccount<Mint>) -> Result<bool> 
 }
 
 pub fn create_token_account<'a>(
-    authority: &AccountInfo<'a>,
-    payer: &AccountInfo<'a>,
-    token_account: &AccountInfo<'a>,
-    mint_account: &AccountInfo<'a>,
-    system_program: &AccountInfo<'a>,
-    token_program: &AccountInfo<'a>,
+    authority: &'a AccountInfo<'a>,
+    payer: &'a AccountInfo<'a>,
+    token_account:&'a AccountInfo<'a>,
+    mint_account: &'a AccountInfo<'a>,
+    system_program: &'a AccountInfo<'a>,
+    token_program: &'a AccountInfo<'a>,
     signer_seeds: &[&[&[u8]]],
 ) -> Result<()> {
     let space = {
