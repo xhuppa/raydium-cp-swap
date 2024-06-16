@@ -77,34 +77,35 @@ pub fn initialize_pool_instr(
         ],
         &program.id(),
     );
+    let accounts = Box::new(raydium_cp_accounts::Initialize {
+        creator: program.payer(),
+        amm_config: amm_config_key,
+        authority,
+        pool_state: pool_account_key,
+        token_0_mint,
+        token_1_mint,
+        lp_mint: lp_mint_key,
+        creator_token_0: user_token_0_account,
+        creator_token_1: user_token_1_account,
+        creator_lp_token: spl_associated_token_account::get_associated_token_address(
+            &program.payer(),
+            &lp_mint_key,
+        ),
+        token_0_vault,
+        token_1_vault,
+        create_pool_fee,
+        observation_state: observation_key,
+        token_program: spl_token::id(),
+        token_0_program,
+        token_1_program,
+        associated_token_program: spl_associated_token_account::id(),
+        system_program: system_program::id(),
+        rent: sysvar::rent::id(),
+    });
 
     let instructions = program
         .request()
-        .accounts(raydium_cp_accounts::Initialize {
-            creator: program.payer(),
-            amm_config: amm_config_key,
-            authority,
-            pool_state: pool_account_key,
-            token_0_mint,
-            token_1_mint,
-            lp_mint: lp_mint_key,
-            creator_token_0: user_token_0_account,
-            creator_token_1: user_token_1_account,
-            creator_lp_token: spl_associated_token_account::get_associated_token_address(
-                &program.payer(),
-                &lp_mint_key,
-            ),
-            token_0_vault,
-            token_1_vault,
-            create_pool_fee,
-            observation_state: observation_key,
-            token_program: spl_token::id(),
-            token_0_program,
-            token_1_program,
-            associated_token_program: spl_associated_token_account::id(),
-            system_program: system_program::id(),
-            rent: sysvar::rent::id(),
-        })
+        .accounts(*accounts)
         .args(raydium_cp_instructions::Initialize {
             init_amount_0,
             init_amount_1,
